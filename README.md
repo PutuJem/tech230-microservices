@@ -26,6 +26,10 @@ Spotify: Spotify, the music streaming platform, has embraced microservices archi
 
 ### **Why microservices may not be suitable**
 
+The decision to use microservices should consider the specific requirements, constraints, and resources available for your application.
+
+The following are examples that may be unsuitable for microservices:
+
 1. Small or Simple Applications: If your application is small in scale or has limited functionality, the added complexity of microservices may outweigh the benefits.
 
 2. Tight Interdependencies: If the services in your application have strong dependencies and tightly coupled interactions, it may be more challenging to split them into independent microservices.
@@ -35,8 +39,6 @@ Spotify: Spotify, the music streaming platform, has embraced microservices archi
 4. Limited Resources: Building and managing microservices require additional resources, including expertise, infrastructure, and monitoring capabilities. If you have limited resources, it may be more practical to use a simpler architecture.
 
 5. Legacy Systems: If you have a legacy system that is difficult to refactor or integrate with microservices, it may be more practical to continue with the existing architecture rather than undertaking a complex migration.
-
-Ultimately, the decision to use microservices should consider the specific requirements, constraints, and resources available for your application.
 
 ### **An introduction to Docker**
 
