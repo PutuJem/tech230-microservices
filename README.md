@@ -61,3 +61,45 @@ The use cases for Docker are as follows:
 6. Hybrid and Multi-Cloud Deployments: Docker enables applications to be deployed across different cloud platforms or on-premises infrastructure. Containers ensure portability, allowing for easy migration and deployment flexibility.
 
 In summary, Docker streamlines application deployment, supports microservices architecture, enhances CI/CD processes, enables scalability and load balancing, provides consistent development and testing environments, and facilitates hybrid and multi-cloud deployments.
+
+### **Section 1: Creating a Docker container to host a personal profile**
+
+A prerequisite to this guide is create a new repository containing a html file describing a personal profile.
+
+**Step 1**: Create a file named `Dockerfile` within the same repository as the .html file and copy it over; ensure to also allow access to port 80.
+
+```docker
+ FROM nginx:latest
+ COPY index.html /usr/share/nginx/html
+ EXPOSE 80
+```
+
+![](images/docker-copy.PNG)
+
+**Step 2**: Open a Git Bash terminal and build the image; check that the image has been created.
+
+```bash
+docker build -t <new_image_name> .
+
+docker images
+```
+
+**Step 3**: Create and deploy the container using the image and map the ports to access it through http; check the container is now running.
+
+```bash
+docker run -d --name <name-container> -p 80:80 <image_name>
+
+docker ps
+```
+
+![](images/docker-ps.PNG)
+
+**Step 4**: Change the docker tag for the image and push the image to dockerhub. The image should now be available on dockerhub.
+
+```bash
+docker tag <image name>:<tag> <dockerhub username>/<image name>:<tag>
+
+docker push <image name:tag>
+```
+
+![](images/dockerhub-profile.PNG)
