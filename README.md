@@ -62,6 +62,23 @@ The use cases for Docker are as follows:
 
 In summary, Docker streamlines application deployment, supports microservices architecture, enhances CI/CD processes, enables scalability and load balancing, provides consistent development and testing environments, and facilitates hybrid and multi-cloud deployments.
 
+### **Security for Docker**
+
+How to maintain security within Docker:
+
+- Use trusted and official Docker images from reputable sources.
+- Keep Docker updated to the latest version for security patches.
+- Minimize installed packages in containers and avoid running as root.
+- Enable Docker's Content Trust feature to ensure image integrity.
+- Set resource limits to prevent excessive resource usage.
+- Use container orchestration tools to isolate and restrict communication.
+- Secure the host system with updates, access controls, and strong configurations.
+- Configure network settings properly and use firewalls for control.
+- Implement centralized logging and monitoring for timely detection.
+- Regularly scan Docker images and containers for vulnerabilities.
+- Manage user access to Docker resources with the principle of least privilege.
+- Secure private Docker image registries with access controls and authentication.
+
 ### **Section 1: Creating a Docker container to host a profile and application**
 
 A prerequisite to this guide is create a new repository containing a html file describing a personal profile.
