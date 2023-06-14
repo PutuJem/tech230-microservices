@@ -62,19 +62,48 @@ The use cases for Docker are as follows:
 
 In summary, Docker streamlines application deployment, supports microservices architecture, enhances CI/CD processes, enables scalability and load balancing, provides consistent development and testing environments, and facilitates hybrid and multi-cloud deployments.
 
-### **Section 1: Creating a Docker container to host a personal profile**
+### **Section 1: Creating a Docker container to host a profile and application**
 
 A prerequisite to this guide is create a new repository containing a html file describing a personal profile.
 
-**Step 1**: Create a file named `Dockerfile` within the same repository as the .html file and copy it over; ensure to also allow access to port 80.
+**Step 1**: Create a file named `Dockerfile` within the same repository as the .file to be copied onto the docker container.
+
+### Dockerfile for a profile running nginx
 
 ```docker
- FROM nginx:latest
- COPY index.html /usr/share/nginx/html
- EXPOSE 80
+# pull the latest version of nginx
+FROM nginx:latest
+
+# copy the local html file to the docker container
+COPY index.html /usr/share/nginx/html
+
+# ensure to allow access through default http
+EXPOSE 80
 ```
 
 ![](images/docker-copy.PNG)
+
+### Dockerfile for an application running nodejs
+
+```docker
+# pull the latest version of nodejs
+FROM node
+
+# add a label maintainer
+LABEL MAINTAINER=james
+
+# navigate to the correct working directory
+WORKDIR /usr/src/app
+
+# copy the local app folder to the docker container
+COPY app /usr/src/app
+
+# expose the port to access the application
+EXPOSE 3000
+
+# run nodejs
+CMD ["node", "app.js"]
+```
 
 **Step 2**: Open a Git Bash terminal and build the image; check that the image has been created.
 
@@ -86,10 +115,14 @@ docker images
 
 **Step 3**: Create and deploy the container using the image and map the ports to access it through http; check the container is now running.
 
+>Note: if an error is raised regarding `TTY`, run `alias docker="winpty docker"`.
+
 ```bash
-docker run -d --name <name-container> -p 80:80 <image_name>
+docker run -d --name <name-container> -p <local-port>:<remote-port> <image_name>
 
 docker ps
+
+docker exec -it <container-id> sh
 ```
 
 ![](images/docker-ps.PNG)
@@ -103,3 +136,47 @@ docker push <image name:tag>
 ```
 
 ![](images/dockerhub-profile.PNG)
+
+### **Section 2: Configuring a database image**
+
+**Step 1**: Download and run a container of the official mongo image.
+
+```bash
+docker run -d -p 27017:27017 mongo
+```
+
+**Step 2**: Connect to the container through a shell with the container ID.
+
+```bash
+docker ps
+
+docker exec -it <container-id> sh
+```
+
+**Step 3**: Update all the dependencies for the commands sudo and nano.
+
+```bash
+apt update -y
+
+apt upgrade -y
+
+apt install sudo -y
+
+sudo apt install nano -y
+```
+
+**Step 4**: Amend the mongo configuration file to allow IP access from anywhere.
+
+![](images/docker-conf.PNG)
+
+**Step 5**: Commit these changes and create a new image.
+
+```bash
+docker commit <container-id> <username>/<new-image-name>:<namespace>
+```
+
+**Step 6**: Push these changes to the dockerhub repository.
+
+```bash
+docker push <username>/<image-name>:<namespace>
+```
