@@ -175,7 +175,7 @@ docker exec -it <container-id> sh
 ```bash
 apt update -y
 
-apt upgrade -y
+apt upgrade --force-y
 
 apt install sudo -y
 
@@ -197,3 +197,57 @@ docker commit <container-id> <username>/<new-image-name>:<namespace>
 ```bash
 docker push <username>/<image-name>:<namespace>
 ```
+
+### **Section 3: Creating a Microservices Architecture using Docker**
+
+The prerequisites to this guide are to have the NodeJS application and Mongo database image locally available. For this guide, the tool `Compose` will be used to define and run multi-container docker applications. A YAML file is first created, which contains the configuration settings; this will be used to manage the whole lifecycle of the application. The two applications will be containerised and configured using the following:
+
+- ***mongo-db***: This service contains the mongo database using the image `mongodb:3.2`. It is only accessible through port 27017, whereby the mongod.conf has already been configured to allow any IP to access it.
+- ***nodejs-app***: This service contains the nodejs application using the image `tech230-james-app:latest`. It is only accessible through port 80; it is also dependent on the database and includes an environment variable to connect them.
+
+![](images/docker-inf.png)
+
+**Step 1**: Create a `docker-compose.yml` file within an appropriate repository; for example, in the application configuration repository.
+
+**Step 2**: Within the YAML file, first include the docker compose version to be used.
+
+```yaml
+version: '3.1'
+```
+
+**Step 3**: State the configuration of the mongo database.
+
+```yaml
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: db
+    restart: always
+    ports:
+      - "27017:27017"
+```
+
+**Step 4**: State the configuration of the nodejs application.
+
+>Reminder: ensure indentation is correct, where the start of the nodejs app config is in line with mongodb.
+
+```yaml
+  my-node-app:
+    image: jemseekings/tech230-james-app:latest
+    container_name: app
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=mongodb://mongodb:27017/posts
+    command: >
+      sh -c "npm install && npm start"
+```
+
+**Step 5**: Run the YAML to begin building the infrastructure; once complete, this will be displayed in the docker desktop application.
+
+>Note: To remove the infrastructure, use `docker compose rm`.
+
+![](images/docker-compose.PNG)
