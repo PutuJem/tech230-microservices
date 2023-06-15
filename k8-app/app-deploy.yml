@@ -1,0 +1,27 @@
+# Specify the API version and kind of the Kubernetes resource, indicating that it is a Deployment.
+apiVersion: apps/v1
+kind: Deployment
+
+# Define the metadata for the Deployment, setting the name to "app-deployment".
+metadata:
+  name: app-deployment
+
+spec:
+  # Insert a selector to match the labels of the Pods controlled by this Deployment.
+  selector:
+    matchLabels:
+      app: app
+  # Specify that the Deployment should maintain three replicas of the Pods.
+  replicas: 3
+  template:
+    metadata:
+      # Specify the Pod template for the Deployment; set the labels for the Pods to app: app.
+      labels:
+        app: app
+    spec:
+      # Define a single container named "app" with the image jemseekings/tech230-james-app:latest; also expose port 3000 for the container.
+      containers:
+      - name: app
+        image: jemseekings/tech230-james-app:latest
+        ports:
+        - containerPort: 3000

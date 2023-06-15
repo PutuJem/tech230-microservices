@@ -267,3 +267,114 @@ The infrastructure of K8 can be seperated into clusters, objects and services:
 K8s deployments define the desired state of applications and handle their lifecycle management. They allow you to specify the number of replicas (pods), upgrade strategies, rollback options, and other settings. Deployments make it simple to scale, update, and roll back applications without downtime. Kubernetes is well-suited for deploying microservices-based architectures. Each microservice can be encapsulated in a container and managed as a separate pod within the Kubernetes cluster. K8s services provide networking and discovery mechanisms to connect microservices together, while deployments handle versioning, scaling, and rolling updates. This makes Kubernetes an ideal platform for deploying and managing microservices-based applications.
 
 Kubernetes supports self-healing mechanisms to ensure the availability of applications. It constantly monitors the health of pods and containers, automatically restarting or replacing any that fail or become unresponsive. This helps maintain the desired state and reliability of applications without manual intervention. Kubernetes offers auto scaling capabilities to adjust the number of pod replicas based on resource utilization. With features like the Horizontal Pod Autoscaler (HPA), Kubernetes can automatically scale the number of replicas up or down in response to CPU, memory, or custom metrics. Auto scaling optimizes resource utilization and helps applications handle varying levels of demand.
+
+### **Section 4: Creating a Microservices Architecture using K8**
+
+This section is seperated into two sections; deployment and service. The deployment is initally to setup the pods and replicas, then the Service exposes the pods to the internet. 
+
+**Step 1**: The first YAML file is for the Deployment, which creates and manages three replicas of Pods running the `jemseekings/tech230-james-app:latest` container image, each accessible through port 3000.
+
+```yaml
+# Specify the API version and kind of the Kubernetes resource, indicating that it is a Deployment.
+apiVersion: apps/v1
+kind: Deployment
+
+# Define the metadata for the Deployment, setting the name to "app-deployment".
+metadata:
+  name: app-deployment
+
+spec:
+
+  # Insert a selector to match the labels of the Pods controlled by this Deployment.
+  selector:
+    matchLabels:
+      app: app
+
+  # Specify that the Deployment should maintain three replicas of the Pods.
+  replicas: 3
+
+  # Specify the Pod template for the Deployment; set the labels for the Pods to app: app.
+  template:
+    metadata:
+      labels:
+        app: app
+    
+    # Define a single container named "app" with the image jemseekings/tech230-james-app:latest; also expose port 3000 for the container.
+    spec:
+      containers:
+      - name: app
+        image: jemseekings/tech230-james-app:latest
+        ports:
+        - containerPort: 3000
+```
+
+**Step 2**: The second YAML file, for the Service named "app-svc", exposes the Pods with the label app: app as a NodePort service on port 30001, allowing access to the application running on port 3000 within the Pods.
+
+```yaml
+# Specify the API version and kind of the Kubernetes resource, indicating that it is a Service.
+apiVersion: v1
+kind: Service
+
+# Define the metadata for the Service, setting the name to "app-svc" and the namespace to "default".
+metadata:
+  name: app-svc
+  namespace: default
+
+# Specify that the Service should listen on port 3000 and forward traffic to the Pods on port 3000; The nodePort field specifies the port on the nodes where the Service is accessible. In this case, it sets it to 30001.
+spec:
+  ports:
+  - nodePort: 30001
+    port: 3000
+    targetPort: 3000
+  
+  # Route traffic to Pods with the label app: app.
+  selector:
+    app: app
+  
+  # Expose the service on a static port on each node in the cluster.
+  type: NodePort
+```
+
+**Step 3**: Run the two files for them to be accessible on the local host on port 30001.
+
+```bash
+kubectl create -f app-deploy.yml
+
+kubectl create -f app-service.yml
+```
+
+**Step 4**: Display the deployment and services.
+
+```bash
+kubectl get deploy
+```
+![](images/k8-deploy.PNG)
+```bash
+kubectl get pods
+```
+![](images/k8-pods.PNG)
+```bash
+kubectl get service
+```
+![](images/k8-services.PNG)
+
+**Step 5**: To demonstrate K8s feature of high availability, first delete the pod and show list of pods to reveal an automatic deployment of another pod.
+
+```bash
+kubectl delete pod app-deployment-8b46c55dd-7n7gs
+
+kubectl get pods
+```
+![](images/k8-ha.PNG)
+
+**Step 6**: K8 can also easily scale whilst in deployment; for example, changing the number of replicas to 5.
+
+```bash
+kubectl delete pod app-deployment-8b46c55dd-7n7gs
+```
+
+![](images/k8-np.PNG)
+
+![](images/k8-create.PNG)
+
+![](images/k8-replica.PNG)
