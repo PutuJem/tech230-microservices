@@ -1,4 +1,23 @@
-# An introduction into Microservices
+# Microservices using Docker and Kubernetes (K8) <!-- omit in toc -->
+
+## Contents <!-- omit in toc -->
+
+- [An introduction into Microservices](#an-introduction-into-microservices)
+  - [Comparing a monolith, multi-tier and microservices architecture](#comparing-a-monolith-multi-tier-and-microservices-architecture)
+  - [Three case studies of organisations using Microservices](#three-case-studies-of-organisations-using-microservices)
+  - [Why microservices may not be suitable](#why-microservices-may-not-be-suitable)
+- [An introduction to Docker](#an-introduction-to-docker)
+  - [Security for Docker](#security-for-docker)
+  - [Section 1: Creating a Docker container to host a profile and application](#section-1-creating-a-docker-container-to-host-a-profile-and-application)
+    - [Dockerfile for a profile running nginx](#dockerfile-for-a-profile-running-nginx)
+    - [Dockerfile for an application running nodejs](#dockerfile-for-an-application-running-nodejs)
+  - [Section 2: Configuring a database image](#section-2-configuring-a-database-image)
+  - [Section 3: Creating a Microservices Architecture using Docker](#section-3-creating-a-microservices-architecture-using-docker)
+- [Introduction to Kubernetes](#introduction-to-kubernetes)
+  - [Section 4: Creating a Microservices Architecture using K8](#section-4-creating-a-microservices-architecture-using-k8)
+
+
+## An introduction into Microservices
 
 Microservices architecture is an approach to building software applications by breaking them down into small, independent services that work together. Each service focuses on a specific task and communicates with other services through APIs.
 
@@ -12,13 +31,13 @@ Use cases for microservices architecture include:
 
 Microservices offer benefits like scalability, flexibility, fault isolation, and easier integration. However, implementing microservices requires careful planning and management due to the added complexity compared to traditional architectures.
 
-### **Comparing a monolith, multi-tier and microservices architecture**
+### Comparing a monolith, multi-tier and microservices architecture
 
 A monolithic architecture is a single, tightly-coupled application, while multi-tier architecture divides the application into logical layers. Microservices architecture, on the other hand, focuses on building independent services that communicate with each other, allowing for flexibility, scalability, and easier integration.
 
 ![](images/monolith.png)
 
-### **Three case studies of organisations using Microservices**
+### Three case studies of organisations using Microservices
 
 Netflix: Netflix is a popular streaming platform that utilizes microservices architecture to provide seamless streaming experiences to millions of users worldwide. By breaking down their application into numerous microservices, such as user authentication, recommendation engine, content delivery, and billing, Netflix can independently scale and update each service based on demand. This allows them to handle high traffic loads and deliver personalized content to users efficiently.
 
@@ -26,7 +45,7 @@ Uber: Uber, the ride-hailing service, relies on microservices architecture to po
 
 Spotify: Spotify, the music streaming platform, has embraced microservices architecture to support its vast catalog of songs and deliver a seamless music streaming experience. Spotify's microservices handle tasks like music recommendation, user playlists, social features, and payment processing. This architecture allows Spotify to continuously innovate and release new features while maintaining a high level of scalability, reliability, and personalized music recommendations for their users.
 
-### **Why microservices may not be suitable**
+### Why microservices may not be suitable
 
 The decision to use microservices should consider the specific requirements, constraints, and resources available for your application.
 
@@ -42,7 +61,7 @@ The following are examples that may be unsuitable for microservices:
 
 5. Legacy Systems: If you have a legacy system that is difficult to refactor or integrate with microservices, it may be more practical to continue with the existing architecture rather than undertaking a complex migration.
 
-### **An introduction to Docker**
+## An introduction to Docker
 
 Docker is a tool that simplifies the packaging and execution of applications within isolated environments known as containers. It offers a consistent and portable solution for deploying applications across various systems.
 
@@ -62,7 +81,7 @@ The use cases for Docker are as follows:
 
 In summary, Docker streamlines application deployment, supports microservices architecture, enhances CI/CD processes, enables scalability and load balancing, provides consistent development and testing environments, and facilitates hybrid and multi-cloud deployments.
 
-### **Security for Docker**
+### Security for Docker
 
 How to maintain security within Docker:
 
@@ -79,13 +98,13 @@ How to maintain security within Docker:
 - Manage user access to Docker resources with the principle of least privilege.
 - Secure private Docker image registries with access controls and authentication.
 
-### **Section 1: Creating a Docker container to host a profile and application**
+### Section 1: Creating a Docker container to host a profile and application
 
 A prerequisite to this guide is create a new repository containing a html file describing a personal profile.
 
 **Step 1**: Create a file named `Dockerfile` within the same repository as the .file to be copied onto the docker container.
 
-### Dockerfile for a profile running nginx
+#### Dockerfile for a profile running nginx
 
 ```docker
 # pull the latest version of nginx
@@ -100,7 +119,7 @@ EXPOSE 80
 
 ![](images/docker-copy.PNG)
 
-### Dockerfile for an application running nodejs
+#### Dockerfile for an application running nodejs
 
 ```docker
 # pull the latest version of nodejs
@@ -154,7 +173,7 @@ docker push <image name:tag>
 
 ![](images/dockerhub-profile.PNG)
 
-### **Section 2: Configuring a database image**
+### Section 2: Configuring a database image
 
 **Step 1**: Download and run a container of the official mongo image.
 
@@ -198,7 +217,7 @@ docker commit <container-id> <username>/<new-image-name>:<namespace>
 docker push <username>/<image-name>:<namespace>
 ```
 
-### **Section 3: Creating a Microservices Architecture using Docker**
+### Section 3: Creating a Microservices Architecture using Docker
 
 The prerequisites to this guide are to have the NodeJS application and Mongo database image locally available. For this guide, the tool `Compose` will be used to define and run multi-container docker applications. A YAML file is first created, which contains the configuration settings; this will be used to manage the whole lifecycle of the application. The two applications will be containerised and configured using the following:
 
@@ -252,7 +271,7 @@ services:
 
 ![](images/docker-compose.PNG)
 
-### **Introduction to Kubernetes**
+## Introduction to Kubernetes
 
 K8s is a shorthand term for Kubernetes, an open-source platform used to manage and deploy containerized applications. It helps automate tasks to simplify the management and scaling of containerized applications, ensures high availability, provides service discovery and load balancing, promotes portability, and has a strong community and ecosystem for support and integration.
 
@@ -268,7 +287,7 @@ K8s deployments define the desired state of applications and handle their lifecy
 
 Kubernetes supports self-healing mechanisms to ensure the availability of applications. It constantly monitors the health of pods and containers, automatically restarting or replacing any that fail or become unresponsive. This helps maintain the desired state and reliability of applications without manual intervention. Kubernetes offers auto scaling capabilities to adjust the number of pod replicas based on resource utilization. With features like the Horizontal Pod Autoscaler (HPA), Kubernetes can automatically scale the number of replicas up or down in response to CPU, memory, or custom metrics. Auto scaling optimizes resource utilization and helps applications handle varying levels of demand.
 
-### **Section 4: Creating a Microservices Architecture using K8**
+### Section 4: Creating a Microservices Architecture using K8
 
 This section is seperated into two sections; deployment and service. The deployment is initally to setup the pods and replicas, then the Service exposes the pods to the internet. 
 
