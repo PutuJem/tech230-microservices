@@ -251,3 +251,19 @@ services:
 >Note: To remove the infrastructure, use `docker compose rm`.
 
 ![](images/docker-compose.PNG)
+
+### **Introduction to Kubernetes**
+
+K8s is a shorthand term for Kubernetes, an open-source platform used to manage and deploy containerized applications. It helps automate tasks to simplify the management and scaling of containerized applications, ensures high availability, provides service discovery and load balancing, promotes portability, and has a strong community and ecosystem for support and integration.
+
+The infrastructure of K8 can be seperated into clusters, objects and services:
+
+- A K8s cluster is a group of machines called nodes that work together under the management of Kubernetes. Nodes can be virtual or physical machines and are responsible for running containerized applications.
+
+- K8s objects are the fundamental units used in Kubernetes to define and manage the state of applications and resources within a cluster. Examples of K8s objects include pods (which encapsulate containers), services (for networking and load balancing), deployments (for managing application versions), and more.
+
+- K8s services enable network connectivity and load balancing within a cluster. They provide a stable endpoint for accessing a set of pods, allowing applications to communicate with each other or be exposed externally. Services abstract the underlying pod infrastructure, making it easier to connect and manage applications.
+
+K8s deployments define the desired state of applications and handle their lifecycle management. They allow you to specify the number of replicas (pods), upgrade strategies, rollback options, and other settings. Deployments make it simple to scale, update, and roll back applications without downtime. Kubernetes is well-suited for deploying microservices-based architectures. Each microservice can be encapsulated in a container and managed as a separate pod within the Kubernetes cluster. K8s services provide networking and discovery mechanisms to connect microservices together, while deployments handle versioning, scaling, and rolling updates. This makes Kubernetes an ideal platform for deploying and managing microservices-based applications.
+
+Kubernetes supports self-healing mechanisms to ensure the availability of applications. It constantly monitors the health of pods and containers, automatically restarting or replacing any that fail or become unresponsive. This helps maintain the desired state and reliability of applications without manual intervention. Kubernetes offers auto scaling capabilities to adjust the number of pod replicas based on resource utilization. With features like the Horizontal Pod Autoscaler (HPA), Kubernetes can automatically scale the number of replicas up or down in response to CPU, memory, or custom metrics. Auto scaling optimizes resource utilization and helps applications handle varying levels of demand.
