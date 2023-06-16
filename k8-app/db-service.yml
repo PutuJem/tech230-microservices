@@ -1,0 +1,22 @@
+# Specify the API version and kind of the Kubernetes resource, indicating that it is a Service.
+apiVersion: v1
+kind: Service
+
+# Define the metadata for the Service, setting the name to "app-svc" and the namespace to "default".
+metadata:
+  name: db-svc
+  namespace: default
+
+# Specify that the Service should listen on port 3000 and forward traffic to the Pods on port 3000; The nodePort field specifies the port on the nodes where the Service is accessible. In this case, it sets it to 30001.
+spec:
+  ports:
+  - nodePort: 30002
+    port: 27017
+    targetPort: 27017
+  
+  # Route traffic to Pods with the label app: app.
+  selector:
+    app: db
+  
+  # Expose the service on a static port on each node in the cluster.
+  type: NodePort

@@ -325,6 +325,12 @@ spec:
         image: jemseekings/tech230-james-app:latest
         ports:
         - containerPort: 3000
+
+        # Set an environment variable for a container for the database service and specify the image pull policy always attempt to pull the latest version of the container image
+        env:
+        - name: DB_HOST
+          value: "mongodb://db-svc:27017/posts"
+        imagePullPolicy: Always
 ```
 
 **Step 2**: The second YAML file, for the Service named "app-svc", exposes the Pods with the label app: app as a NodePort service on port 30001, allowing access to the application running on port 3000 within the Pods.
@@ -389,7 +395,7 @@ kubectl get pods
 **Step 6**: K8 can also easily scale whilst in deployment; for example, changing the number of replicas to 5.
 
 ```bash
-kubectl delete pod app-deployment-8b46c55dd-7n7gs
+kubectl edit deploy nginx-deployment
 ```
 
 ![](images/k8-np.PNG)
@@ -397,3 +403,52 @@ kubectl delete pod app-deployment-8b46c55dd-7n7gs
 ![](images/k8-create.PNG)
 
 ![](images/k8-replica.PNG)
+
+**Step 7**: Repeat steps 1 & 2 for the mongo database; first, the mongo deployment.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: db-deployment
+spec:
+  selector:
+    matchLabels:
+      app: db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+    
+    # Define the container image and expose port 27017.
+      containers:
+      - name: db
+        image: mongo:4.4
+        ports:
+        - containerPort: 27017
+```
+
+**Step 8**: Secondly, the mongo service.
+
+```yaml
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: db-svc
+  namespace: default
+
+spec:
+  ports:
+  - nodePort: 30002
+    port: 27017
+    targetPort: 27017
+  selector:
+    app: db
+  type: NodePort
+```
+
+**Step 9**: Secondly, the mongo service.
